@@ -52,10 +52,12 @@ module dualport_rw #(
         if(write_en) begin
           Mem[write_address] <= data_in;
         end
-//        else if(!read_en) data_out <= 4'bzzzz;
         if(read_en) begin
           data_out <= (write_en && write_address==read_address) ? data_in : Mem[read_address];
         end
+        else begin
+                data_out <= data_out;  // Hold last value when read_en = 0 (synthesizable)
+            end
       end
 
     end
