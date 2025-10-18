@@ -32,7 +32,7 @@ module rom4x4_sync #(
     input [ADDR_WIDTH-1 : 0]address
     );
 
-    reg [DATA_WIDTH-1 : 0]ROM[0 : ADDR_WIDTH];
+    reg [DATA_WIDTH-1 : 0]ROM[0 : ARR_WIDTH-1];
     initial begin
       ROM[0] = 4'hA;
       ROM[1] = 4'h8;
@@ -47,7 +47,6 @@ module rom4x4_sync #(
         else if(en) begin
           rom_data_out <= ROM[address];
         end
-        else rom_data_out <= 4'bzzzz;
      end
      
 endmodule

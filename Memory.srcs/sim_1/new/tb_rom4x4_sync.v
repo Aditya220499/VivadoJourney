@@ -26,22 +26,23 @@ module tb_rom4x4_sync;
     reg rst;
     reg clk;
     reg [1 : 0]address;
+    reg simulation_done = 0;  // Flag to stop printing
 
     rom4x4_sync dut(.rom_data_out(rom_data_out), .en(en), .rst(rst), .clk(clk), .address(address));
-    initial begin
-      clk = 0;
-      address = 0;
-      rst = 0;
-      en = 0;
-    end
 
     initial begin
       forever #5 clk = ~clk;
     end
 
     initial begin
+      clk = 0;
+      address = 0;
+      rst = 0;
+      en = 0;
+      #15 rst = 0;  // Release reset after 1.5 cycles
+      #10 en = 1;   // Enable after 1 cycle
       $strobe("----------------Start Simulation---------------");
-      $monitor(" Enable :: %d || Reset :: %d || Address :: %d || Data Out :: %d", en, rst, address, rom_data_out);
+//      $monitor(" Enable :: %d || Reset :: %d || Address :: %d || Data Out :: %d", en, rst, address, rom_data_out);
       @(negedge clk) en = 1;
       @(negedge clk) address = 1;
       @(negedge clk) address = 3;
@@ -51,13 +52,20 @@ module tb_rom4x4_sync;
       @(negedge clk) en = 1;
       @(negedge clk) address = 1;
       @(negedge clk) address = 0;
+      @(negedge clk) address = 3;
       @(negedge clk) address = 2;
       @(negedge clk) rst = 1;
       @(negedge clk) rst = 0;
       @(negedge clk) address = 1;
       repeat(10)@(posedge clk);
+      simulation_done = 1;
       $strobe("----------------End Simulation------------------");
-//      #10 $finish
+      #10 $finish;
+    end
+    
+    always @(posedge clk) begin
+        if (en && !rst && !simulation_done)  // Only print when enabled and not resetting
+            $strobe("Time=%t: En=%d, Rst=%d, Addr=%d, Data=%h", $time, en, rst, address, rom_data_out);
     end
 
 endmodule
