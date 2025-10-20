@@ -30,6 +30,8 @@ module tb_fifo_sync;
       reg rst;
       reg clk;
       reg simulation_done = 0;
+      integer i;
+
 
       fifo_sync dut( .data_out(data_out), .isFull(isFull), .isEmpty(isEmpty), .data_in(data_in), .write_en(write_en), .read_en(read_en), .rst(rst), .clk(clk));
 
@@ -52,7 +54,7 @@ module tb_fifo_sync;
         @(negedge clk) write_en = 0; data_in = 4'hA;
         @(negedge clk) read_en = 1; 
         @(negedge clk) write_en = 1; data_in = 4'h4;
-        @(negedge clk) read_en = 1;
+        @(negedge clk) read_en = 0;
         @(negedge clk) write_en = 1; data_in = 4'h1;
         @(negedge clk) write_en = 1; data_in = 4'h9;
         @(negedge clk) write_en = 1; data_in = 4'h8;
@@ -62,10 +64,10 @@ module tb_fifo_sync;
         @(negedge clk) read_en = 1;
         @(negedge clk) read_en = 1;
         @(negedge clk) read_en = 1;
+        @(negedge clk) read_en = 0;
         @(negedge clk) write_en = 1; data_in = 4'h5;
         @(negedge clk) rst = 1;
         @(negedge clk) read_en = 1;
-        repeat(10)@(posedge clk);
         simulation_done = 1;
         $strobe("----------------End Simulation------------------");
         #10 $finish;
@@ -74,6 +76,12 @@ module tb_fifo_sync;
       always @(posedge clk) begin
         if (!simulation_done)  // Only print when enabled and not resetting
             $strobe("Time=%t: Read Enable=%d, Data Out=%h, Write Enable=%d, Data In=%h, isFull=%d, isEmpty=%d", $time, read_en, data_out, write_en, data_in, isFull, isEmpty );
+            $write("FIFO = [");
+            for (i = 0; i < dut.FIFO_DEPTH; i = i + 1) begin
+                $write("%h", dut.FIFO[i]);
+                if (i < dut.FIFO_DEPTH - 1) $write(", ");
+            end
+            $display("]");
     end
     
 endmodule
