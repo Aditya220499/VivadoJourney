@@ -11,9 +11,10 @@ interface adder_if (input logic clk);
     endclocking
 
     property en_behavior;
-        @(posedge clk)
-        en |-> sum == a + b;
+         @(posedge clk)
+         en |-> ##1 sum == $past(a) + $past(b);
     endproperty
+
 
     assert property (en_behavior)
     else $error("ASSERTION FAILED: sum mismatch when en=1");
