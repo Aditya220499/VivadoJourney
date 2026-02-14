@@ -9,4 +9,12 @@ interface adder_if (input logic clk);
         output en, a, b;
         input  sum;
     endclocking
+
+    property en_behavior;
+        @(posedge clk)
+        en |-> sum == a + b;
+    endproperty
+
+assert property (en_behavior);
+
 endinterface
