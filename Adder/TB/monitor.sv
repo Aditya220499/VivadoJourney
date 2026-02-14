@@ -16,7 +16,7 @@ class monitor;
                 tx.a = vif.cb.a;
                 tx.b = vif.cb.b;
                 @(vif.cb);
-                tx.expected_sum = vif.cb.sum;
+                tx.actual_sum = vif.cb.sum;
                 mon2scb.put(tx);
             end
         end

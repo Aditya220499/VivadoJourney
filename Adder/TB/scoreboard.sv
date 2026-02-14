@@ -10,12 +10,12 @@ class scoreboard;
             adder_tx tx;
             mon2scb.get(tx);
 
-            if (tx.expected_sum !== tx.a + tx.b)
+            if (tx.actual_sum !== tx.a + tx.b)
                 $error("Mismatch! a=%0d b=%0d sum=%0d",
-                       tx.a, tx.b, tx.expected_sum);
+                       tx.a, tx.b, tx.actual_sum);
             else
                 $display("PASS: a=%0d b=%0d sum=%0d",
-                         tx.a, tx.b, tx.expected_sum);
+                         tx.a, tx.b, tx.actual_sum);
         end
     endtask
 endclass
