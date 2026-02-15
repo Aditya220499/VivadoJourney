@@ -95,6 +95,7 @@ package adder_pkg;
 
           @(vif.cb);
           tx.actual_sum = vif.sum;
+          tx.expected_sum = tx.a + tx.b;
 
           mon2scb.put(tx);
         end
