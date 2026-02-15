@@ -145,6 +145,7 @@ package adder_pkg;
 
     mailbox #(adder_tx) gen2drv = new();
     mailbox #(adder_tx) mon2scb = new();
+    mailbox #(adder_tx) gen2scb = new();
 
     function new(virtual adder_if vif);
       gen = new(gen2drv);
