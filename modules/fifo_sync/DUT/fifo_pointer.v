@@ -1,4 +1,4 @@
-module sync_fifo #(
+module sync_fifo #( 
   parameter DEPTH = 4,
   parameter WIDTH = 8,
   parameter ALMOST = 1
